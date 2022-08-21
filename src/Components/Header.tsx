@@ -3,7 +3,6 @@ import {
   motion,
   useAnimation,
   useScroll,
-  useViewportScroll,
   Variants,
 } from "framer-motion";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -70,7 +69,7 @@ const Circle = styled(motion.span)`
   width: 5px;
   height: 5px;
   border-radius: 5px;
-  bottom: -5px;
+  bottom: -8px;
   left: 0;
   right: 0;
   margin: 0 auto;
