@@ -83,15 +83,19 @@ const NextIcon = styled(motion.img)`
 `;
 
 const rowVariants: Variants = {
-  hidden: (isNext: boolean) => ({
-    x: isNext ? window.innerWidth : -window.innerWidth,
-  }),
+  hidden: (isNext: boolean) => {
+    return {
+      x: isNext ? window.innerWidth : -window.innerWidth,
+    };
+  },
   visible: {
     x: 0,
   },
-  exit: (isNext: boolean) => ({
-    x: isNext ? -window.innerWidth : window.innerWidth,
-  }),
+  exit: (isNext: boolean) => {
+    return {
+      x: isNext ? -window.innerWidth : window.innerWidth,
+    };
+  },
 };
 
 const boxVariants: Variants = {
@@ -154,8 +158,8 @@ const MovieSlider = ({ data }: Iprops) => {
     if (data) {
       if (leaving) return;
       else {
-        const totalMovies = data?.results.length;
-        const maxIndex = Math.floor(totalMovies / offset);
+        const totalMovies = data?.results.length -1;
+        const maxIndex = Math.floor(totalMovies / offset) -1;
 
         toggleLeaving();
 
@@ -169,11 +173,11 @@ const MovieSlider = ({ data }: Iprops) => {
     if (data) {
       if (leaving) return;
       else {
-        const totalMovies = data?.results.length - 1;
-        const maxIndex = Math.ceil(totalMovies / offset) - 1;
+        const totalMovies = data?.results.length -1;
+        const maxIndex = Math.ceil(totalMovies / offset) -1;
 
         toggleLeaving();
-        setIndex((prev) => (prev === maxIndex ? maxIndex - 1 : prev - 1));
+        setIndex((prev) => (prev === 0 ? maxIndex - 1 : prev - 1));
         setIsNext(() => false);
       }
     }
@@ -194,6 +198,7 @@ const MovieSlider = ({ data }: Iprops) => {
             exit="exit"
             transition={{ type: "tween", duration: 1 }}
             key={index}
+            custom={isNext}
           >
             {data?.results
               .slice(offset * index, offset * index + offset)
