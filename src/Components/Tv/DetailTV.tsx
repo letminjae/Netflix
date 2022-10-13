@@ -4,11 +4,11 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import {
-  getMovieCredit,
-  getMovieDetail,
-  IGetMovieCredit,
-  IGetMovieDetail,
-} from "../../Apis/movieApi";
+  getTvCredit,
+  getTvDetail,
+  IGetTvCredit,
+  IGetTvDetail,
+} from "../../Apis/tvApi";
 import { makeImagePath } from "../../utils";
 
 const Loader = styled.div`
@@ -158,14 +158,14 @@ interface IProps {
 }
 
 function DetailMovie({ id, kind }: IProps) {
-  const { data: detailData, isLoading: detailLoading } =
-    useQuery<IGetMovieDetail>(["movie", `${kind}_detail`], () =>
-      getMovieDetail(id)
-    );
-  const { data: creditData, isLoading: creditLoading } =
-    useQuery<IGetMovieCredit>(["movie", `${kind}_credit`], () =>
-      getMovieCredit(id)
-    );
+  const { data: detailData, isLoading: detailLoading } = useQuery<IGetTvDetail>(
+    ["movie", `${kind}_detail`],
+    () => getTvDetail(id)
+  );
+  const { data: creditData, isLoading: creditLoading } = useQuery<IGetTvCredit>(
+    ["movie", `${kind}_credit`],
+    () => getTvCredit(id)
+  );
 
   const Directing = creditData?.crew.find(
     (people) => people.known_for_department === "Directing"
@@ -202,9 +202,9 @@ function DetailMovie({ id, kind }: IProps) {
                 <HelmetProvider>
                   <Helmet>
                     <title>
-                      {detailData.title
-                        ? detailData.title
-                        : detailData.original_title}
+                      {detailData.name
+                        ? detailData.name
+                        : detailData.original_name}
                     </title>
                   </Helmet>
                 </HelmetProvider>
@@ -217,11 +217,10 @@ function DetailMovie({ id, kind }: IProps) {
                   )}
                 >
                   <span id="title">
-                    {detailData.title
-                      ? detailData.title
-                      : detailData.original_title}
+                    {detailData.name
+                      ? detailData.name
+                      : detailData.original_name}
                   </span>
-                  <span id="tagline">{detailData.tagline}</span>
                 </ModalImage>
 
                 <Info>

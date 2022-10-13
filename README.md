@@ -19,7 +19,6 @@ npm start
 - FrontEnd Framework : `React`
 - Style library : `Styled-components`
 - Animation library : `Framer-motion` 
-- State Management : `Recoil`
 - Data Management : `React-query`
 - Form library : `React-Hook-Form`
 - Deploy : `AWS S3`
