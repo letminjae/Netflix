@@ -64,6 +64,11 @@ body {
   color: ${props => props.theme.white.darker};
   line-height: 1.2;
   background-color: black;
+  -ms-overflow-style: none; // IE and Edge
+  scrollbar-width: none; // FireFox
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
 }
 a {
   text-decoration:none;
