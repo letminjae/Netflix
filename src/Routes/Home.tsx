@@ -38,18 +38,36 @@ const Title = styled.h2`
 `;
 
 const Overview = styled.p`
-  font-size: 30px;
+  font-size: 22px;
   width: 50%;
+`;
+
+const BannerBtn = styled.div`
+  font-weight: 600;
+  font-size: 18px;
+  width: 150px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 5px;
+  margin-top: 15px;
+  cursor: pointer;
+  background-color: rgba(109, 109, 110, 0.7);
+  color: white;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  &:hover {
+    background-color: rgba(109, 109, 110, 1);
+  }
 `;
 
 function Home() {
   const history = useHistory();
 
+  const moveBanner = (id: string) => () => {
+    history.push(`/movie/${id}`);
+  };
+
   // Movie API fetching
-  const { data: nowData, isLoading: nowLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
-    () => getMovies("now_playing")
-  );
   const { data: popularData, isLoading: popularLoading } =
     useQuery<IGetMoviesResult>(["movie", "popular"], () =>
       getMovies("popular")
@@ -66,13 +84,13 @@ function Home() {
   // Banner API data fetching
   const { data: bannerData, isLoading: bannerLoading } =
     useQuery<IGetMovieDetail>(["movie", "banner"], () =>
-      getMovieDetail(String(615173))
+      getMovieDetail(String(496243))
     );
+
 
   return (
     <Wrapper>
-      {nowLoading &&
-      popularLoading &&
+      {popularLoading &&
       topLoading &&
       upLoading &&
       bannerLoading ? (
@@ -82,12 +100,14 @@ function Home() {
           <Banner bgPhoto={makeImagePath(bannerData?.backdrop_path || "")}>
             <Title>{bannerData?.title}</Title>
             <Overview>{bannerData?.overview}</Overview>
+            <BannerBtn onClick={moveBanner(bannerData?.id + "")}>
+              상세 정보
+            </BannerBtn>
           </Banner>
 
-          <MovieSlider data={nowData} />
-          <MovieSlider data={popularData} />
-          <MovieSlider data={topData} />
-          <MovieSlider data={upData} />
+          <MovieSlider kind="popular" data={popularData} />
+          <MovieSlider kind="toprated" data={topData} />
+          <MovieSlider kind="upcoming" data={upData} />
         </>
       )}
     </Wrapper>

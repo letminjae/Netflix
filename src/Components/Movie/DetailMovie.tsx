@@ -45,10 +45,11 @@ color: ${(props) => props.theme.white.lighter};
 `;
 
 interface IProps {
+    kind: string;
     id: string;
 }
 
-function DetailMovie({id} : IProps) {
+function DetailMovie({id, kind} : IProps) {
   return (
     <>
     </>

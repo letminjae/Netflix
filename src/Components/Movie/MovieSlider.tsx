@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesResult } from "../../Apis/movieApi";
@@ -8,9 +8,24 @@ import next from "../../Images/next.png";
 import prev from "../../Images/prev.png";
 import DetailMovie from "./DetailMovie";
 
+const Loader = styled.div`
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Slider = styled.div`
   position: relative;
   height: 50vh;
+`;
+
+const SliderTitle = styled.h2`
+  margin-bottom: 20px;
+  padding-left: 10px;
+  color: white;
+  font-size : 24px;
+  font-weight: 800;
 `;
 
 const Row = styled(motion.div)`
@@ -22,8 +37,8 @@ const Row = styled(motion.div)`
   padding: 0 5px;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string }>`
-  background-image: url(${(props) => props.bgPhoto});
+const Box = styled(motion.div)<{ bgphoto: string }>`
+  background-image: url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -69,7 +84,7 @@ const Info = styled(motion.div)`
 const PrevIcon = styled(motion.img)`
   position: absolute;
   width: 60px;
-  top: 60px;
+  top: 120px;
   left: 0;
   cursor: pointer;
 `;
@@ -77,7 +92,7 @@ const PrevIcon = styled(motion.img)`
 const NextIcon = styled(motion.img)`
   position: absolute;
   width: 60px;
-  top: 60px;
+  top: 120px;
   right: 0;
   cursor: pointer;
 `;
@@ -134,20 +149,38 @@ const IconVariants: Variants = {
 };
 
 interface Iprops {
+  kind: string;
   data?: IGetMoviesResult;
 }
 
-const MovieSlider = ({ data }: Iprops) => {
+const MovieSlider = ({ kind, data }: Iprops) => {
+  const [titleName, setTitle] = useState("");
+  const [isSearch, setSearch] = useState(false);
+
+  useEffect(() => {
+    switch (kind) {
+      case "popular":
+        setTitle("대한민국에서 인기인 영화");
+        break;
+      case "toprated":
+        setTitle("평점높은 영화");
+        break;
+      case "upcoming":
+        setTitle("상영예정 영화");
+        break;
+      case "search":
+        setTitle("영화");
+        setSearch(true);
+        break;
+    }
+  }, [kind]);
+
   const [index, setIndex] = useState(0);
   const [isNext, setIsNext] = useState(true);
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
 
   const history = useHistory();
-
-  const onBoxClicked = (movieId: number) => {
-    history.push(`/movies/${movieId}`);
-  };
 
   const offset = 6;
 
@@ -158,8 +191,8 @@ const MovieSlider = ({ data }: Iprops) => {
     if (data) {
       if (leaving) return;
       else {
-        const totalMovies = data?.results.length -1;
-        const maxIndex = Math.floor(totalMovies / offset) -1;
+        const totalMovies = data?.results.length;
+        const maxIndex = Math.floor(totalMovies / offset) - 1;
 
         toggleLeaving();
 
@@ -173,8 +206,8 @@ const MovieSlider = ({ data }: Iprops) => {
     if (data) {
       if (leaving) return;
       else {
-        const totalMovies = data?.results.length -1;
-        const maxIndex = Math.ceil(totalMovies / offset) -1;
+        const totalMovies = data?.results.length;
+        const maxIndex = Math.ceil(totalMovies / offset) - 1;
 
         toggleLeaving();
         setIndex((prev) => (prev === 0 ? maxIndex - 1 : prev - 1));
@@ -183,71 +216,84 @@ const MovieSlider = ({ data }: Iprops) => {
     }
   };
 
+  const clickBox = (id: number) => {
+    setTimeout(() => {
+      if (isSearch) {
+        history.push(`/search/movie/${id}`);
+      } else {
+        history.push(`/movie/${id}`);
+      }
+    }, 50);
+  };
+
   return (
     <>
-      <Slider>
-        <AnimatePresence
-          onExitComplete={toggleLeaving}
-          initial={false}
-          custom={isNext}
-        >
-          <Row
-            variants={rowVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            transition={{ type: "tween", duration: 1 }}
-            key={index}
-            custom={isNext}
-          >
-            {data?.results
-              .slice(offset * index, offset * index + offset)
-              .map((movie) => (
-                <Box
-                  layoutId={movie.id + ""}
-                  key={movie.id}
-                  bgPhoto={makeImagePath(
-                    movie.backdrop_path
-                      ? movie.backdrop_path
-                      : movie.poster_path
-                  )}
-                  variants={boxVariants}
-                  initial="normal"
-                  whileHover="hover"
-                  onClick={() => onBoxClicked(movie.id)}
-                >
-                  <Info variants={infoVariants}>
-                    <h4>{movie.title}</h4>
-                    <span>★ {movie.vote_average}</span>
-                  </Info>
-                </Box>
-              ))}
-          </Row>
-        </AnimatePresence>
-        <PrevIcon
-          src={prev}
-          variants={IconVariants}
-          initial="initial"
-          whileHover="hover"
-          onClick={prevIndex}
-        />
-        <NextIcon
-          src={next}
-          variants={IconVariants}
-          initial="initial"
-          whileHover="hover"
-          onClick={nextIndex}
-        />
-      </Slider>
+      {data ? (
+        <>
+          <Slider>
+          <SliderTitle>{titleName}</SliderTitle>
+            <AnimatePresence
+              onExitComplete={toggleLeaving}
+              initial={false}
+              custom={isNext}
+            >
+              <Row
+                variants={rowVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ type: "tween", duration: 1 }}
+                key={index}
+                custom={isNext}
+              >
+                {data?.results
+                  .slice(offset * index, offset * index + offset)
+                  .map((movie) => (
+                    <Box
+                      layoutId={movie.id + ""}
+                      key={movie.id}
+                      bgphoto={makeImagePath(
+                        movie.backdrop_path
+                          ? movie.backdrop_path
+                          : movie.poster_path
+                      )}
+                      variants={boxVariants}
+                      initial="normal"
+                      whileHover="hover"
+                      onClick={() => clickBox(movie.id)}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                        <span>★ {movie.vote_average}</span>
+                      </Info>
+                    </Box>
+                  ))}
+              </Row>
+            </AnimatePresence>
+            <PrevIcon
+              src={prev}
+              variants={IconVariants}
+              initial="initial"
+              whileHover="hover"
+              onClick={prevIndex}
+            />
+            <NextIcon
+              src={next}
+              variants={IconVariants}
+              initial="initial"
+              whileHover="hover"
+              onClick={nextIndex}
+            />
+          </Slider>
 
-      <AnimatePresence>
-            {movieMatch ? (
-              <DetailMovie id={movieMatch.params.id} />
-            ) : null}
-            {searchMatch ? (
-              <DetailMovie id={searchMatch.params.id} />
-            ) : null}
+          <AnimatePresence>
+            {movieMatch ? <DetailMovie id={movieMatch.params.id} kind={kind} /> : null}
+            {searchMatch ? <DetailMovie id={searchMatch.params.id} kind={kind} /> : null}
           </AnimatePresence>
+        </>
+      ) : (
+        <Loader>Loading...</Loader>
+      )}
     </>
   );
 };
