@@ -2,10 +2,10 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
-import { IGetMoviesResult } from "../../api";
+import { IGetMoviesResult } from "../../Apis/movieApi";
 import { makeImagePath } from "../../utils";
-import next from "../../image/next.png";
-import prev from "../../image/prev.png";
+import next from "../../Images/next.png";
+import prev from "../../Images/prev.png";
 import DetailMovie from "./DetailMovie";
 
 const Slider = styled.div`

@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { motion, AnimatePresence, useScroll } from "framer-motion";
-import { useState } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../api";
-import Slider from "../Components/Movie/MovieSlider";
+import {
+  getMovieDetail,
+  getMovies,
+  IGetMovieDetail,
+  IGetMoviesResult,
+} from "../Apis/movieApi";
+import MovieSlider from "../Components/Movie/MovieSlider";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
@@ -41,35 +44,50 @@ const Overview = styled.p`
 
 function Home() {
   const history = useHistory();
-  const bigMovieMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
 
-  const { scrollY } = useScroll();
-
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
+  // Movie API fetching
+  const { data: nowData, isLoading: nowLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
-    getMovies
+    () => getMovies("now_playing")
+  );
+  const { data: popularData, isLoading: popularLoading } =
+    useQuery<IGetMoviesResult>(["movie", "popular"], () =>
+      getMovies("popular")
+    );
+  const { data: topData, isLoading: topLoading } = useQuery<IGetMoviesResult>(
+    ["movie", "top"],
+    () => getMovies("top_rated")
+  );
+  const { data: upData, isLoading: upLoading } = useQuery<IGetMoviesResult>(
+    ["movie", "upcoming"],
+    () => getMovies("upcoming")
   );
 
-  const onOverlayClick = () => history.push("/");
-
-  const clickedMovie =
-    bigMovieMatch?.params.movieId &&
-    data?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch.params.movieId
+  // Banner API data fetching
+  const { data: bannerData, isLoading: bannerLoading } =
+    useQuery<IGetMovieDetail>(["movie", "banner"], () =>
+      getMovieDetail(String(615173))
     );
 
   return (
     <Wrapper>
-      {isLoading ? (
+      {nowLoading &&
+      popularLoading &&
+      topLoading &&
+      upLoading &&
+      bannerLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
-            <Title>{data?.results[0].title}</Title>
-            <Overview>{data?.results[0].overview}</Overview>
+          <Banner bgPhoto={makeImagePath(bannerData?.backdrop_path || "")}>
+            <Title>{bannerData?.title}</Title>
+            <Overview>{bannerData?.overview}</Overview>
           </Banner>
 
-          <Slider data={data} />
+          <MovieSlider data={nowData} />
+          <MovieSlider data={popularData} />
+          <MovieSlider data={topData} />
+          <MovieSlider data={upData} />
         </>
       )}
     </Wrapper>

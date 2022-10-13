@@ -63,7 +63,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   color: ${props => props.theme.white.darker};
   line-height: 1.2;
-  background-color: black;
+  background-color: 222222;
   -ms-overflow-style: none; // IE and Edge
   scrollbar-width: none; // FireFox
   &::-webkit-scrollbar {
