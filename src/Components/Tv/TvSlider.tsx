@@ -17,7 +17,7 @@ const Loader = styled.div`
 
 const Slider = styled.div`
   position: relative;
-  height: 50vh;
+  height: 40vh;
 `;
 
 const SliderTitle = styled.h2`

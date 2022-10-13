@@ -114,8 +114,8 @@ function Header() {
   const { scrollY } = useScroll();
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    navigate(`/search?keyword=${data.keyword}`);
-    setValue("keyword", "");
+      navigate(`/search?keyword=${data.keyword}`);
+      setValue("keyword", "");
   }
 
   const [searchOpen, setSearchOpen] = useState(false);

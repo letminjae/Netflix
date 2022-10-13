@@ -2,32 +2,13 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { IGetMoviesResult } from "../Apis/movieApi";
-import {
-  getSearchKey,
-  getSearchMovie,
-  getSearchTv,
-  IGetSearchKey,
-} from "../Apis/searchApi";
-import { IGetTvResult } from "../Apis/tvApi";
+import { getSearchKey } from "../Apis/searchApi";
 import MovieSlider from "../Components/Movie/MovieSlider";
 import TvSlider from "../Components/Tv/TvSlider";
 
 const Wrapper = styled.div`
   margin-top: 80px;
   height: 40vh;
-`;
-
-const Div = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: center;
-  height: 250px;
-  color: white;
-  margin-top: 20px;
-  padding-top: 40px;
-  padding-left: 20px;
 `;
 
 const Loader = styled.div`
@@ -37,22 +18,16 @@ const Loader = styled.div`
   align-items: center;
 `;
 
+const Contents = styled.div`
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+`;
+
 const Title = styled.h2`
-  font-size : 28px;
+  font-size: 28px;
   font-weight: 600;
-`;
-
-const KeyResult = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  margin: 20px 10px;
-`;
-
-const Key = styled.div`
-  margin: 10px;
-  font-size: 18px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 24px;
 `;
 
 const Nothing = styled.div`
@@ -72,26 +47,21 @@ function Search() {
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get("keyword");
 
-  const { data: keyData, isLoading: keyLoading } = useQuery<IGetSearchKey>(
-    ["search", "key"],
-    () => getSearchKey(keyword!),
-    { enabled: !!keyword }
+  const { data: movieData, isLoading: movieLoading } = useQuery(
+    ["searchData", keyword, "movie"],
+    () => getSearchKey(keyword!, "movie")
   );
-  const { data: movieData, isLoading: movieLoading } =
-    useQuery<IGetMoviesResult>(
-      ["search", "movie"],
-      () => getSearchMovie(keyword!),
-      { enabled: !!keyword }
-    );
-  const { data: tvData, isLoading: tvLoading } = useQuery<IGetTvResult>(
-    ["search", "tv"],
-    () => getSearchTv(keyword!),
-    { enabled: !!keyword }
+
+  const { data: tvData, isLoading: tvLoading } = useQuery(
+    ["searchData", keyword, "tv"],
+    () => getSearchKey(keyword!, "tv")
   );
+
+  console.log(movieData, tvData);
 
   return (
     <Wrapper>
-      {keyLoading && movieLoading && tvLoading ? (
+      {movieLoading && tvLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
@@ -101,20 +71,13 @@ function Search() {
             </Helmet>
           </HelmetProvider>
 
-          {keyData?.results.length &&
-          movieData?.results.length &&
-          tvData?.results.length ? (
+          {movieData?.results.length && tvData?.results.length ? (
             <>
-              <Div>
-                <Title>다음과 관련된 콘텐츠</Title>
-                <KeyResult>
-                  {keyData.results.slice(0, 18).map((key) => (
-                    <Key key={key.id}>{key.name ? key.name : key.title}</Key>
-                  ))}
-                </KeyResult>
-              </Div>
-              <MovieSlider kind="search" data={movieData} />
-              <TvSlider kind="search" data={tvData} />
+              <Title>"{keyword}"을(를) 검색한 콘텐츠</Title>
+              <Contents>
+                <MovieSlider kind="search" data={movieData} />
+                <TvSlider kind="search" data={tvData} />
+              </Contents>
             </>
           ) : (
             <Nothing>
