@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useNavigate, useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { makeImagePath } from "../../utils";
 import next from "../../Images/next.png";
@@ -180,12 +180,12 @@ const TvSlider = ({ kind, data }: Iprops) => {
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const offset = 6;
 
-  const tvMatch = useRouteMatch<{ id: string }>("/tv/:id");
-  const searchMatch = useRouteMatch<{ id: string }>("/search/tv/:id");
+  const tvMatch = useMatch("/tv/:id");
+  const searchMatch = useMatch("/search/tv/:id");
 
   const nextIndex = () => {
     if (data) {
@@ -219,9 +219,9 @@ const TvSlider = ({ kind, data }: Iprops) => {
   const clickBox = (id: number) => {
     setTimeout(() => {
       if (isSearch) {
-        history.push(`/search/tv/${id}`);
+        navigate(`/search/tv/${id}`);
       } else {
-        history.push(`/tv/${id}`);
+        navigate(`/tv/${id}`);
       }
     }, 50);
   };

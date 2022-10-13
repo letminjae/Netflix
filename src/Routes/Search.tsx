@@ -2,7 +2,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { IGetMoviesResult } from "../Apis/movieApi"
+import { IGetMoviesResult } from "../Apis/movieApi";
 import {
   getSearchKey,
   getSearchMovie,
@@ -37,17 +37,21 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Title = styled.h2``;
+const Title = styled.h2`
+  font-size : 28px;
+  font-weight: 600;
+`;
 
 const KeyResult = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  margin: 10px;
+  margin: 20px 10px;
 `;
 
 const Key = styled.div`
   margin: 10px;
   font-size: 18px;
+  font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
 `;
 
@@ -73,11 +77,12 @@ function Search() {
     () => getSearchKey(keyword!),
     { enabled: !!keyword }
   );
-  const { data: movieData, isLoading: movieLoading } = useQuery<IGetMoviesResult>(
-    ["search", "movie"],
-    () => getSearchMovie(keyword!),
-    { enabled: !!keyword }
-  );
+  const { data: movieData, isLoading: movieLoading } =
+    useQuery<IGetMoviesResult>(
+      ["search", "movie"],
+      () => getSearchMovie(keyword!),
+      { enabled: !!keyword }
+    );
   const { data: tvData, isLoading: tvLoading } = useQuery<IGetTvResult>(
     ["search", "tv"],
     () => getSearchTv(keyword!),
@@ -90,9 +95,11 @@ function Search() {
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Helmet>
-            <title>SEARCH: C-FLIX</title>
-          </Helmet>
+          <HelmetProvider>
+            <Helmet>
+              <title>Netflix : SEARCH</title>
+            </Helmet>
+          </HelmetProvider>
 
           {keyData?.results.length &&
           movieData?.results.length &&

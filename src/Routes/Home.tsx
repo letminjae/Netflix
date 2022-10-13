@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useHistory } from "react-router-dom";
+import { HelmetProvider, Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   getMovieDetail,
@@ -63,10 +64,10 @@ const BannerBtn = styled.div`
 `;
 
 function Home() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const moveBanner = (id: string) => () => {
-    history.push(`/movie/${id}`);
+    navigate(`/movie/${id}`);
   };
 
   // Movie API fetching
@@ -99,6 +100,12 @@ function Home() {
         <Loader>Loading...</Loader>
       ) : (
         <>
+          <HelmetProvider>
+            <Helmet>
+              <title>Netflix</title>
+            </Helmet>
+          </HelmetProvider>
+
           <Banner bgPhoto={makeImagePath(bannerData?.backdrop_path || "")}>
             <Title>{bannerData?.title}</Title>
             <Overview>{bannerData?.overview}</Overview>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   getMovieCredit,
@@ -154,7 +154,7 @@ const modalVariants: Variants = {
 
 interface IProps {
   kind: string;
-  id: string;
+  id: any;
 }
 
 function DetailMovie({ id, kind }: IProps) {
@@ -173,10 +173,10 @@ function DetailMovie({ id, kind }: IProps) {
 
   const Casting = creditData?.cast.slice(0, 3);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const clickOverlay = () => {
-    history.goBack();
+    navigate(-1);
   };
 
   return (

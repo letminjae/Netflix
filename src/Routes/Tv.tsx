@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getTv, getTvDetail, IGetTvDetail, IGetTvResult } from "../Apis/tvApi";
 import TvSlider from "../Components/Tv/TvSlider";
@@ -58,10 +58,10 @@ const BannerBtn = styled.div`
 `;
 
 function Tv() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const moveBanner = (id: string) => () => {
-    history.push(`/tv/${id}`);
+    navigate(`/tv/${id}`);
   };
 
   // Movie API fetching
