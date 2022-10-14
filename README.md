@@ -1,6 +1,6 @@
 # Netflix
 
-## [Netflix 배포 사이트]()
+## [Netflix 배포 사이트](https://letminjae-netflix.netlify.app/)
 
 ```
 git clone https://github.com/letminjae/Netflix.git
@@ -20,7 +20,7 @@ npm start
 - Data Management : `React-query`
 - Form library : `React-Hook-Form`
 - Responsive library : `useMediaQuery`
-- Deploy, CI/CD : `Heroku`
+- Deploy, CI/CD : `Netlify`
 
 ## 트러블 슈팅
 > env apikey 401 error - env 에러
