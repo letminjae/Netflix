@@ -7,6 +7,7 @@ import { makeImagePath } from "../../utils";
 import next from "../../Images/next.png";
 import prev from "../../Images/prev.png";
 import DetailMovie from "./DetailMovie";
+import { useMediaQuery } from "react-responsive";
 
 const Loader = styled.div`
   height: 20vh;
@@ -24,7 +25,7 @@ const SliderTitle = styled.h2`
   margin-bottom: 20px;
   padding-left: 10px;
   color: white;
-  font-size : 24px;
+  font-size: 24px;
   font-weight: 800;
 `;
 
@@ -35,6 +36,14 @@ const Row = styled(motion.div)`
   gap: 5px;
   width: 100%;
   padding: 0 5px;
+
+  @media ${(props) => props.theme.medium} {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media ${(props) => props.theme.small} {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
@@ -182,9 +191,13 @@ const MovieSlider = React.memo(({ kind, data }: Iprops) => {
 
   const navigate = useNavigate();
 
+  const isLarge = useMediaQuery({ minWidth: 1101 });
+  const isMedium = useMediaQuery({ minWidth: 801, maxWidth: 1100 });
+  const isSmall = useMediaQuery({ maxWidth: 800 });
+
   const offset = 6;
   const mediumOffset = 5;
-  const smallOffset = 4;
+  const smallOffset = 3;
 
   const movieMatch = useMatch("/movie/:id");
   const searchMatch = useMatch("/search/movie/:id");
@@ -233,44 +246,120 @@ const MovieSlider = React.memo(({ kind, data }: Iprops) => {
       {data ? (
         <>
           <Slider>
-          <SliderTitle>{titleName}</SliderTitle>
+            <SliderTitle>{titleName}</SliderTitle>
             <AnimatePresence
               onExitComplete={toggleLeaving}
               initial={false}
               custom={isNext}
             >
-              <Row
-                variants={rowVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ type: "tween", duration: 1 }}
-                key={index}
-                custom={isNext}
-              >
-                {data?.results
-                  .slice(offset * index, offset * index + offset)
-                  .map((movie) => (
-                    <Box
-                      layoutId={movie.id + ""}
-                      key={movie.id}
-                      bgphoto={makeImagePath(
-                        movie.backdrop_path
-                          ? movie.backdrop_path
-                          : movie.poster_path
-                      )}
-                      variants={boxVariants}
-                      initial="normal"
-                      whileHover="hover"
-                      onClick={() => clickBox(movie.id)}
-                    >
-                      <Info variants={infoVariants}>
-                        <h4>{movie.title}</h4>
-                        <span>★ {movie.vote_average}</span>
-                      </Info>
-                    </Box>
-                  ))}
-              </Row>
+              {isSmall && (
+                <Row
+                  variants={rowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                  custom={isNext}
+                >
+                  {data?.results
+                    .slice(
+                      smallOffset * index,
+                      smallOffset * index + smallOffset
+                    )
+                    .map((movie) => (
+                      <Box
+                        layoutId={movie.id + ""}
+                        key={movie.id}
+                        bgphoto={makeImagePath(
+                          movie.backdrop_path
+                            ? movie.backdrop_path
+                            : movie.poster_path
+                        )}
+                        variants={boxVariants}
+                        initial="normal"
+                        whileHover="hover"
+                        onClick={() => clickBox(movie.id)}
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{movie.title}</h4>
+                          <span>★ {movie.vote_average}</span>
+                        </Info>
+                      </Box>
+                    ))}
+                </Row>
+              )}
+              {isMedium && (
+                <Row
+                  variants={rowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                  custom={isNext}
+                >
+                  {data?.results
+                    .slice(
+                      mediumOffset * index,
+                      mediumOffset * index + mediumOffset
+                    )
+                    .map((movie) => (
+                      <Box
+                        layoutId={movie.id + ""}
+                        key={movie.id}
+                        bgphoto={makeImagePath(
+                          movie.backdrop_path
+                            ? movie.backdrop_path
+                            : movie.poster_path
+                        )}
+                        variants={boxVariants}
+                        initial="normal"
+                        whileHover="hover"
+                        onClick={() => clickBox(movie.id)}
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{movie.title}</h4>
+                          <span>★ {movie.vote_average}</span>
+                        </Info>
+                      </Box>
+                    ))}
+                </Row>
+              )}
+              {isLarge && (
+                <Row
+                  variants={rowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                  custom={isNext}
+                >
+                  {data?.results
+                    .slice(offset * index, offset * index + offset)
+                    .map((movie) => (
+                      <Box
+                        layoutId={movie.id + ""}
+                        key={movie.id}
+                        bgphoto={makeImagePath(
+                          movie.backdrop_path
+                            ? movie.backdrop_path
+                            : movie.poster_path
+                        )}
+                        variants={boxVariants}
+                        initial="normal"
+                        whileHover="hover"
+                        onClick={() => clickBox(movie.id)}
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{movie.title}</h4>
+                          <span>★ {movie.vote_average}</span>
+                        </Info>
+                      </Box>
+                    ))}
+                </Row>
+              )}
             </AnimatePresence>
             <PrevIcon
               src={prev}
@@ -289,8 +378,12 @@ const MovieSlider = React.memo(({ kind, data }: Iprops) => {
           </Slider>
 
           <AnimatePresence>
-            {movieMatch ? <DetailMovie id={movieMatch.params.id} kind={kind} /> : null}
-            {searchMatch ? <DetailMovie id={searchMatch.params.id} kind={kind} /> : null}
+            {movieMatch ? (
+              <DetailMovie id={movieMatch.params.id} kind={kind} />
+            ) : null}
+            {searchMatch ? (
+              <DetailMovie id={searchMatch.params.id} kind={kind} />
+            ) : null}
           </AnimatePresence>
         </>
       ) : (

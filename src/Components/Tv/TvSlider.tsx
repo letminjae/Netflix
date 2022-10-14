@@ -25,7 +25,7 @@ const SliderTitle = styled.h2`
   margin-bottom: 20px;
   padding-left: 10px;
   color: white;
-  font-size : 24px;
+  font-size: 24px;
   font-weight: 800;
 `;
 
@@ -36,6 +36,14 @@ const Row = styled(motion.div)`
   gap: 5px;
   width: 100%;
   padding: 0 5px;
+
+  @media ${(props) => props.theme.medium} {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media ${(props) => props.theme.small} {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
@@ -183,7 +191,13 @@ const TvSlider = React.memo(({ kind, data }: Iprops) => {
 
   const navigate = useNavigate();
 
-  let offset = 6;
+  const isLarge = useMediaQuery({ minWidth: 1101 });
+  const isMedium = useMediaQuery({ minWidth: 801, maxWidth: 1100 });
+  const isSmall = useMediaQuery({ maxWidth: 800 });
+
+  const offset = 6;
+  const mediumOffset = 5;
+  const smallOffset = 3;
 
   const tvMatch = useMatch("/tv/:id");
   const searchMatch = useMatch("/search/tv/:id");
@@ -232,44 +246,108 @@ const TvSlider = React.memo(({ kind, data }: Iprops) => {
       {data ? (
         <>
           <Slider>
-          <SliderTitle>{titleName}</SliderTitle>
+            <SliderTitle>{titleName}</SliderTitle>
             <AnimatePresence
               onExitComplete={toggleLeaving}
               initial={false}
               custom={isNext}
             >
-              <Row
-                variants={rowVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ type: "tween", duration: 1 }}
-                key={index}
-                custom={isNext}
-              >
-                {data?.results
-                  .slice(offset * index, offset * index + offset)
-                  .map((tv) => (
-                    <Box
-                      layoutId={tv.id + ""}
-                      key={tv.id}
-                      bgphoto={makeImagePath(
-                        tv.backdrop_path
-                          ? tv.backdrop_path 
-                          : tv.poster_path
-                      )}
-                      variants={boxVariants}
-                      initial="normal"
-                      whileHover="hover"
-                      onClick={() => clickBox(tv.id)}
-                    >
-                      <Info variants={infoVariants}>
-                        <h4>{tv.name}</h4>
-                        <span>★ {tv.vote_average}</span>
-                      </Info>
-                    </Box>
-                  ))}
-              </Row>
+              {isSmall && (
+                <Row
+                  variants={rowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                  custom={isNext}
+                >
+                  {data?.results
+                    .slice(smallOffset * index, smallOffset * index + smallOffset)
+                    .map((tv) => (
+                      <Box
+                        layoutId={tv.id + ""}
+                        key={tv.id}
+                        bgphoto={makeImagePath(
+                          tv.backdrop_path ? tv.backdrop_path : tv.poster_path
+                        )}
+                        variants={boxVariants}
+                        initial="normal"
+                        whileHover="hover"
+                        onClick={() => clickBox(tv.id)}
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{tv.name}</h4>
+                          <span>★ {tv.vote_average}</span>
+                        </Info>
+                      </Box>
+                    ))}
+                </Row>
+              )}
+              {isMedium && (
+                <Row
+                  variants={rowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                  custom={isNext}
+                >
+                  {data?.results
+                    .slice(mediumOffset * index, mediumOffset * index + mediumOffset)
+                    .map((tv) => (
+                      <Box
+                        layoutId={tv.id + ""}
+                        key={tv.id}
+                        bgphoto={makeImagePath(
+                          tv.backdrop_path ? tv.backdrop_path : tv.poster_path
+                        )}
+                        variants={boxVariants}
+                        initial="normal"
+                        whileHover="hover"
+                        onClick={() => clickBox(tv.id)}
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{tv.name}</h4>
+                          <span>★ {tv.vote_average}</span>
+                        </Info>
+                      </Box>
+                    ))}
+                </Row>
+              )}
+              {isLarge && (
+                <Row
+                  variants={rowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                  custom={isNext}
+                >
+                  {data?.results
+                    .slice(offset * index, offset * index + offset)
+                    .map((tv) => (
+                      <Box
+                        layoutId={tv.id + ""}
+                        key={tv.id}
+                        bgphoto={makeImagePath(
+                          tv.backdrop_path ? tv.backdrop_path : tv.poster_path
+                        )}
+                        variants={boxVariants}
+                        initial="normal"
+                        whileHover="hover"
+                        onClick={() => clickBox(tv.id)}
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{tv.name}</h4>
+                          <span>★ {tv.vote_average}</span>
+                        </Info>
+                      </Box>
+                    ))}
+                </Row>
+              )}
             </AnimatePresence>
             <PrevIcon
               src={prev}
@@ -289,7 +367,9 @@ const TvSlider = React.memo(({ kind, data }: Iprops) => {
 
           <AnimatePresence>
             {tvMatch ? <DetailTV id={tvMatch.params.id} kind={kind} /> : null}
-            {searchMatch ? <DetailTV id={searchMatch.params.id} kind={kind} /> : null}
+            {searchMatch ? (
+              <DetailTV id={searchMatch.params.id} kind={kind} />
+            ) : null}
           </AnimatePresence>
         </>
       ) : (
