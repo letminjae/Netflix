@@ -42,11 +42,17 @@ const Modal = styled(motion.div)`
   background-color: #141414;
 
   @media ${(props) => props.theme.medium} {
-    width: 90vw;
+    width: 80vw;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
   }
 
   @media ${(props) => props.theme.small} {
-    width: 90vw;
+    width: 80vw;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
   }
 `;
 
@@ -54,6 +60,7 @@ const ModalImage = styled.div<{ bgphoto: string }>`
   background-image: linear-gradient(to top, #141414, transparent),
     url(${(props) => props.bgphoto});
   border-radius: 12px 12px 0 0;
+  position: relative;
   height: 500px;
   background-size: cover;
   background-position: top center;

@@ -19,6 +19,10 @@ npm start
 - Animation library : `Framer-motion` 
 - Data Management : `React-query`
 - Form library : `React-Hook-Form`
-- Deploy : `AWS S3`
+- Responsive library : `useMediaQuery`
+- Deploy, CI/CD : `Heroku`
 
 ## 트러블 슈팅
+> env apikey 401 error - env 에러
+> 리액트 헬멧 에러
+> 검색 여러번 할 시 해당 키워드 검색창으로 넘어가지 않는문제

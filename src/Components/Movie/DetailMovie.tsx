@@ -42,11 +42,17 @@ const Modal = styled(motion.div)`
   background-color: #141414;
 
   @media ${(props) => props.theme.medium} {
-    width: 90vw;
+    width: 80vw;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
   }
 
   @media ${(props) => props.theme.small} {
-    width: 90vw;
+    width: 80vw;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
   }
 `;
 
@@ -54,6 +60,7 @@ const ModalImage = styled.div<{ bgphoto: string }>`
   background-image: linear-gradient(to top, #141414, transparent),
     url(${(props) => props.bgphoto});
   border-radius: 12px 12px 0 0;
+  position: relative;
   height: 500px;
   background-size: cover;
   background-position: top center;
@@ -62,14 +69,14 @@ const ModalImage = styled.div<{ bgphoto: string }>`
     font-size: 48px;
     font-weight: 600;
     position: absolute;
-    bottom: 46%;
+    bottom: 20%;
     left: 5%;
   }
   #tagline {
     font-size: 24px;
     font-weight: 500;
     position: absolute;
-    bottom: 42%;
+    bottom: 14%;
     left: 5%;
   }
   display: flex;
@@ -83,13 +90,13 @@ const ModalImage = styled.div<{ bgphoto: string }>`
       font-size: 36px;
       font-weight: 500;
       position: absolute;
-      bottom: 52%;
+      bottom: 20%;
     }
     #tagline {
       font-size: 20px;
       font-weight: 400;
       position: absolute;
-      bottom: 48%;
+      bottom: 14%;
     }
   }
 
@@ -101,13 +108,13 @@ const ModalImage = styled.div<{ bgphoto: string }>`
       font-size: 28px;
       font-weight: 400;
       position: absolute;
-      bottom: 56%;
+      bottom: 20%;
     }
     #tagline {
       font-size: 18px;
       font-weight: 300;
       position: absolute;
-      bottom: 52%;
+      bottom: 14%;
     }
   }
 `;
@@ -152,9 +159,9 @@ const ModalInfo = styled.div`
     font-size: 24px;
     font-weight: 500;
   }
-  
+
   @media ${(props) => props.theme.small} {
-    span:last-child{
+    span:last-child {
       display: none;
     }
   }
