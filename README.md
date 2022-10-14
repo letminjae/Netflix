@@ -54,7 +54,7 @@ react_devtools_backend.js:4026 Warning: Using UNSAFE_componentWillMount in stric
 Please update the following components: SideEffect(NullComponent)
 ```
 - react-helmet이 호출될 때 사용한 메소드가 react-side-effect에 노출되어 더이상 helmet 컴포넌트만 쓸수 없는 문제.
-- react-helmet-async 패키지를 설치하고 <HelmetProvider>를 통해 캡슐화 진행
+- react-helmet-async 패키지를 설치하고 `HelmetProvider`를 통해 캡슐화 진행
 ```jsx
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 
@@ -72,8 +72,8 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 > 검색 여러번 할 시 해당 키워드 검색창으로 넘어가지 않는문제
 - 키워드를 입력하면 키워드에 관련한 컨텐츠를 api 요청하여 DOM에 뿌려주는 작업.
 - 허나, 아무리 입력해도 URL은 잘 바뀌는데 DOM에 응답받은 api들이 없어 이전 검색내용을 그대로 렌더링.
-- Network 창을 확인해보니, fetching을 총 3번하는데 (검색키워드 관련된 컨텐츠 확인 get요청, 영화 컨텐츠 get 요청, 시리즈 컨텐츠 get 요청) 한번에 요청하는게 많다보니 응답 속도가 5초가 걸려 렌더링이 안되어 보였던 상태.
-- fetch 로직을 수정하여 3번 요청하지않고 1번에 요청, 응답속도를 줄여 해결완료.
+- Network 창을 확인해보니, fetching을 총 3번하는데 (검색키워드 관련된 컨텐츠 확인 get요청, 영화 컨텐츠 get 요청, 시리즈 컨텐츠 get 요청) 한번에 요청하는게 많다보니 `응답 속도가 5초가 걸려 렌더링이 안되어 보였던 상태.`
+- `fetch 로직을 수정하여 3번 요청하지않고 1번에 요청, 응답속도를 200ms로 줄여 해결완료.`
 ```js
 export async function getSearchKey(keyword: string, type: string) {
   return await (
