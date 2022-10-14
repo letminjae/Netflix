@@ -57,8 +57,6 @@ function Search() {
     () => getSearchKey(keyword!, "tv")
   );
 
-  console.log(movieData, tvData);
-
   return (
     <Wrapper>
       {movieLoading && tvLoading ? (

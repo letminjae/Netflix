@@ -1,10 +1,5 @@
 import styled from "styled-components";
-import {
-  motion,
-  useAnimation,
-  useScroll,
-  Variants,
-} from "framer-motion";
+import { motion, useAnimation, useScroll, Variants } from "framer-motion";
 import { Link, useNavigate, useMatch } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -34,6 +29,12 @@ const Logo = styled(motion.svg)`
   fill: ${(props) => props.theme.red};
   fill-opacity: 1;
   cursor: pointer;
+
+  @media ${(props) => props.theme.small} {
+    margin-right: 30px;
+    width: 75px;
+    height: 20px;
+  }
 `;
 
 const Items = styled.ul`
@@ -64,6 +65,13 @@ const Search = styled.form`
   svg {
     height: 25px;
   }
+
+  @media ${(props) => props.theme.small} {
+    svg {
+      z-index: 999;
+      height: 25px;
+    }
+  }
 `;
 
 const Circle = styled(motion.span)`
@@ -90,14 +98,22 @@ const Input = styled(motion.input)`
   font-size: 16px;
   background-color: transparent;
   border: 1px solid ${(props) => props.theme.white.lighter};
+
+  @media ${(props) => props.theme.small} {
+    background-color: #222222;
+    z-index: 99;
+    &::placeholder {
+      color: white;
+    }
+  }
 `;
 
 const navVariants: Variants = {
   top: {
-    backgroundColor: "rgba(0, 0, 0, 0)"
+    backgroundColor: "rgba(0, 0, 0, 0)",
   },
   scroll: {
-    backgroundColor: "rgba(0, 0, 0, 1)"
+    backgroundColor: "rgba(0, 0, 0, 1)",
   },
 };
 
@@ -114,9 +130,9 @@ function Header() {
   const { scrollY } = useScroll();
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const onValid = (data: IForm) => {
-      navigate(`/search?keyword=${data.keyword}`);
-      setValue("keyword", "");
-  }
+    navigate(`/search?keyword=${data.keyword}`);
+    setValue("keyword", "");
+  };
 
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -142,7 +158,11 @@ function Header() {
   }, [scrollY, navAnimation]);
 
   return (
-    <Nav variants={navVariants} initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }} animate={navAnimation}>
+    <Nav
+      variants={navVariants}
+      initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+      animate={navAnimation}
+    >
       <Col>
         <Logo
           xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +189,7 @@ function Header() {
         </Items>
       </Col>
       <Col>
-      <Search onSubmit={handleSubmit(onValid)}>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -245 : 0 }}
@@ -185,7 +205,7 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
-          {...register("keyword", {required: true, minLength: 2})}
+            {...register("keyword", { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { makeImagePath } from "../../utils";
@@ -7,6 +7,7 @@ import next from "../../Images/next.png";
 import prev from "../../Images/prev.png";
 import DetailTV from "./DetailTV";
 import { IGetTvResult } from "../../Apis/tvApi";
+import { useMediaQuery } from "react-responsive";
 
 const Loader = styled.div`
   height: 20vh;
@@ -153,7 +154,7 @@ interface Iprops {
   data?: IGetTvResult;
 }
 
-const TvSlider = ({ kind, data }: Iprops) => {
+const TvSlider = React.memo(({ kind, data }: Iprops) => {
   const [titleName, setTitle] = useState("");
   const [isSearch, setSearch] = useState(false);
 
@@ -182,7 +183,7 @@ const TvSlider = ({ kind, data }: Iprops) => {
 
   const navigate = useNavigate();
 
-  const offset = 6;
+  let offset = 6;
 
   const tvMatch = useMatch("/tv/:id");
   const searchMatch = useMatch("/search/tv/:id");
@@ -296,6 +297,6 @@ const TvSlider = ({ kind, data }: Iprops) => {
       )}
     </>
   );
-};
+});
 
 export default TvSlider;

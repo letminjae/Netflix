@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesResult } from "../../Apis/movieApi";
@@ -153,7 +153,7 @@ interface Iprops {
   data?: IGetMoviesResult;
 }
 
-const MovieSlider = ({ kind, data }: Iprops) => {
+const MovieSlider = React.memo(({ kind, data }: Iprops) => {
   const [titleName, setTitle] = useState("");
   const [isSearch, setSearch] = useState(false);
 
@@ -183,6 +183,8 @@ const MovieSlider = ({ kind, data }: Iprops) => {
   const navigate = useNavigate();
 
   const offset = 6;
+  const mediumOffset = 5;
+  const smallOffset = 4;
 
   const movieMatch = useMatch("/movie/:id");
   const searchMatch = useMatch("/search/movie/:id");
@@ -296,6 +298,6 @@ const MovieSlider = ({ kind, data }: Iprops) => {
       )}
     </>
   );
-};
+});
 
 export default MovieSlider;

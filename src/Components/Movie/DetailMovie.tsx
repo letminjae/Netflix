@@ -10,6 +10,7 @@ import {
   IGetMovieDetail,
 } from "../../Apis/movieApi";
 import { makeImagePath } from "../../utils";
+import React from "react";
 
 const Loader = styled.div`
   height: 20vh;
@@ -30,7 +31,7 @@ const Overlay = styled(motion.div)`
 
 const Modal = styled(motion.div)`
   position: absolute;
-  width: 50vw;
+  width: 70vw;
   height: 90vh;
   top: 5%;
   left: 0;
@@ -39,6 +40,14 @@ const Modal = styled(motion.div)`
   border-radius: 10px;
   overflow: hidden;
   background-color: #141414;
+
+  @media ${(props) => props.theme.medium} {
+    width: 90vw;
+  }
+
+  @media ${(props) => props.theme.small} {
+    width: 90vw;
+  }
 `;
 
 const ModalImage = styled.div<{ bgphoto: string }>`
@@ -53,18 +62,54 @@ const ModalImage = styled.div<{ bgphoto: string }>`
     font-size: 48px;
     font-weight: 600;
     position: absolute;
-    bottom: 50%;
+    bottom: 46%;
     left: 5%;
   }
   #tagline {
     font-size: 24px;
     font-weight: 500;
     position: absolute;
-    bottom: 46%;
+    bottom: 42%;
     left: 5%;
   }
   display: flex;
   flex-direction: column;
+
+  @media ${(props) => props.theme.medium} {
+    background-position: center;
+    width: 100%;
+    height: 450px;
+    #title {
+      font-size: 36px;
+      font-weight: 500;
+      position: absolute;
+      bottom: 52%;
+    }
+    #tagline {
+      font-size: 20px;
+      font-weight: 400;
+      position: absolute;
+      bottom: 48%;
+    }
+  }
+
+  @media ${(props) => props.theme.small} {
+    background-position: center;
+    width: 100%;
+    height: 400px;
+    #title {
+      font-size: 28px;
+      font-weight: 400;
+      position: absolute;
+      bottom: 56%;
+    }
+    #tagline {
+      font-size: 18px;
+      font-weight: 300;
+      position: absolute;
+      bottom: 52%;
+    }
+  }
 `;
 
 const Info = styled.div`
@@ -73,6 +118,17 @@ const Info = styled.div`
   padding: 0px 48px;
   gap: 48px;
   font-weight: 500;
+
+  @media ${(props) => props.theme.small} {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 0px;
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const Genre = styled.div`
@@ -81,6 +137,9 @@ const Genre = styled.div`
   }
   span:last-child::after {
     content: none;
+  }
+  @media ${(props) => props.theme.small} {
+    width: 350px;
   }
 `;
 
@@ -93,6 +152,12 @@ const ModalInfo = styled.div`
     font-size: 24px;
     font-weight: 500;
   }
+  
+  @media ${(props) => props.theme.small} {
+    span:last-child{
+      display: none;
+    }
+  }
 `;
 
 const ModalCreditsInfo = styled.div`
@@ -100,8 +165,13 @@ const ModalCreditsInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 5px;
   padding: 20px 0px;
+
+  @media ${(props) => props.theme.small} {
+    gap: 16px;
+  }
 `;
 
 const ModalDirectorInfo = styled.div``;
@@ -157,7 +227,7 @@ interface IProps {
   id: any;
 }
 
-function DetailMovie({ id, kind }: IProps) {
+const DetailMovie = React.memo(({ id, kind }: IProps) => {
   const { data: detailData, isLoading: detailLoading } =
     useQuery<IGetMovieDetail>(["movie", `${kind}_detail`], () =>
       getMovieDetail(id)
@@ -234,8 +304,8 @@ function DetailMovie({ id, kind }: IProps) {
                     </span>
                     <span>
                       {detailData.overview
-                        ? detailData.overview.length >= 310
-                          ? detailData.overview.substr(0, 310) + "..."
+                        ? detailData.overview.length >= 240
+                          ? detailData.overview.substr(0, 240) + "..."
                           : detailData.overview
                         : "설명이 없습니다"}
                     </span>
@@ -255,21 +325,23 @@ function DetailMovie({ id, kind }: IProps) {
                       <span id="name">{Directing?.original_name}</span>
                     </ModalDirectorInfo>
 
-                    <span id="title" style={{ marginTop: "8px" }}>
-                      배우
-                    </span>
-                    <ModalCast>
-                      {Casting?.map((Cast) => (
-                        <ModalCastInfo key={Cast.id}>
-                          <ModalInfoImage
-                            bgphoto={makeImagePath(
-                              Cast?.profile_path ? Cast?.profile_path : ""
-                            )}
-                          />
-                          <span id="name">{Cast?.original_name}</span>
-                        </ModalCastInfo>
-                      ))}
-                    </ModalCast>
+                    <div style={{ marginTop: "8px" }}>
+                      <span id="title" style={{ padding: "0px 16px" }}>
+                        배우
+                      </span>
+                      <ModalCast>
+                        {Casting?.map((Cast) => (
+                          <ModalCastInfo key={Cast.id}>
+                            <ModalInfoImage
+                              bgphoto={makeImagePath(
+                                Cast?.profile_path ? Cast?.profile_path : ""
+                              )}
+                            />
+                            <span id="name">{Cast?.original_name}</span>
+                          </ModalCastInfo>
+                        ))}
+                      </ModalCast>
+                    </div>
                   </ModalCreditsInfo>
                 </Info>
               </>
@@ -279,6 +351,6 @@ function DetailMovie({ id, kind }: IProps) {
       )}
     </AnimatePresence>
   );
-}
+});
 
 export default DetailMovie;

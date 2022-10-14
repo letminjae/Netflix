@@ -31,18 +31,50 @@ const Banner = styled.div<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
   background-size: cover;
+  background-position: center;
+
+  @media ${(props) => props.theme.medium} {
+    background-position : center;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media ${(props) => props.theme.small} {
+    background-position : center;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 68px;
   font-weight: 800;
   margin-bottom: 10px;
+
+  @media ${(props) => props.theme.medium} {
+    font-size: 48px;
+    font-weight: 700;
+  }
+
+  @media ${(props) => props.theme.small} {
+    font-size: 32px;
+    font-weight: 600;
+  }
 `;
 
 const Overview = styled.p`
   font-size: 22px;
   font-weight: 500;
   width: 50%;
+
+  @media ${(props) => props.theme.medium} {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  @media ${(props) => props.theme.small} {
+    display: none;
+  }
 `;
 
 const BannerBtn = styled.div`
@@ -60,6 +92,18 @@ const BannerBtn = styled.div`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
   &:hover {
     background-color: rgba(109, 109, 110, 1);
+  }
+
+  @media ${(props) => props.theme.medium} {
+    font-size: 16px;
+    font-weight: 500;
+    width: 120px;
+  }
+
+  @media ${(props) => props.theme.small} {
+    font-size: 12px;
+    font-weight: 400;
+    width: 100px;
   }
 `;
 
