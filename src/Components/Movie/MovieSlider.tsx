@@ -353,7 +353,7 @@ const MovieSlider = React.memo(({ kind, data }: Iprops) => {
                         onClick={() => clickBox(movie.id)}
                       >
                         <Info variants={infoVariants}>
-                          <h4>{movie.original_title}</h4>
+                          <h4>{movie.title}</h4>
                           <span>★ {movie.vote_average}</span>
                         </Info>
                       </Box>

@@ -341,7 +341,7 @@ const TvSlider = React.memo(({ kind, data }: Iprops) => {
                         onClick={() => clickBox(tv.id)}
                       >
                         <Info variants={infoVariants}>
-                          <h4>{tv.name}</h4>
+                          <h4>{tv.original_name}</h4>
                           <span>★ {tv.vote_average}</span>
                         </Info>
                       </Box>
