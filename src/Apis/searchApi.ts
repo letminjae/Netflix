@@ -17,7 +17,7 @@ export interface IGetSearchKey {
 export async function getSearchKey(keyword: string, type: string) {
   return await (
     await fetch(
-      `${BASE_PATH}/search/${type}?api_key=${API_KEY}&query=${keyword}`
+      `${BASE_PATH}/search/${type}?api_key=${API_KEY}&query=${keyword}&language=ko`
     )
   ).json();
 }
