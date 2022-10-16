@@ -8,18 +8,12 @@ import {
   IGetMovieDetail,
   IGetMoviesResult,
 } from "../Apis/movieApi";
+import Loading from "../Components/Loading";
 import MovieSlider from "../Components/Movie/MovieSlider";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background-color: black;
-`;
-
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
@@ -141,7 +135,7 @@ function Home() {
       topLoading &&
       upLoading &&
       bannerLoading ? (
-        <Loader>Loading...</Loader>
+        <Loading></Loading>
       ) : (
         <>
           <HelmetProvider>

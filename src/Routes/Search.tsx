@@ -5,17 +5,11 @@ import styled from "styled-components";
 import { getSearchKey } from "../Apis/searchApi";
 import MovieSlider from "../Components/Movie/MovieSlider";
 import TvSlider from "../Components/Tv/TvSlider";
+import Loading from "../Components/Loading";
 
 const Wrapper = styled.div`
   margin-top: 80px;
   height: 40vh;
-`;
-
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Contents = styled.div`
@@ -31,16 +25,12 @@ const Title = styled.h2`
 `;
 
 const Nothing = styled.div`
-  margin-top: 50vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   color: white;
-  span:nth-child(2) {
-    font-size: 18px;
-    margin-top: 20px;
-  }
+  font-size: 36px;
 `;
 
 function Search() {
@@ -60,7 +50,7 @@ function Search() {
   return (
     <Wrapper>
       {movieLoading && tvLoading ? (
-        <Loader>Loading...</Loader>
+        <Loading></Loading>
       ) : (
         <>
           <HelmetProvider>
@@ -78,10 +68,7 @@ function Search() {
               </Contents>
             </>
           ) : (
-            <Nothing>
-              <span>검색결과가 없습니다.</span>
-              <span>상단 오른쪽의 검색 아이콘을 클릭하여 검색해주세요!</span>
-            </Nothing>
+            <Nothing>검색결과가 없습니다.</Nothing>
           )}
         </>
       )}

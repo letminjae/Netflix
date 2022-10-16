@@ -2,18 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getTv, getTvDetail, IGetTvDetail, IGetTvResult } from "../Apis/tvApi";
+import Loading from "../Components/Loading";
 import TvSlider from "../Components/Tv/TvSlider";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background-color: black;
-`;
-
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
@@ -130,7 +124,7 @@ function Tv() {
       {topLoading &&
       upLoading &&
       bannerLoading ? (
-        <Loader>Loading...</Loader>
+        <Loading />
       ) : (
         <>
           <Banner bgPhoto={makeImagePath(bannerData?.backdrop_path || "")}>
